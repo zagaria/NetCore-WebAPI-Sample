@@ -4,11 +4,11 @@ EXPOSE 80
 
 FROM microsoft/aspnetcore-build:2.0 AS build
 WORKDIR /src
-COPY ImpulseAPI.sln ./
-COPY ImpulseAPI/ImpulseAPI.csproj ImpulseAPI/
+COPY API.sln ./
+COPY API/API.csproj API/
 RUN dotnet restore -nowarn:msb3202,nu1503
 COPY . .
-WORKDIR /src/ImpulseAPI
+WORKDIR /src/API
 RUN dotnet build -c Release -o /app
 
 FROM build AS publish
@@ -17,4 +17,4 @@ RUN dotnet publish -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "ImpulseAPI.dll"]
+ENTRYPOINT ["dotnet", "API.dll"]
